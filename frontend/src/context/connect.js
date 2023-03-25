@@ -21,7 +21,8 @@ function useConnect() {
   };
 
   const accountsChanged = (newAccount) => {
-    if (newAccount.length) setAccount(newAccount);
+    // console.log(newAccount);
+    if (newAccount.length) setAccount(newAccount[0]);
     else setAccount(null);
   };
 

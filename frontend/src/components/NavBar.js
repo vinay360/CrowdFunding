@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import CustomButton from './CustomButton';
-import { logo, menu, search, thirdweb } from '../assets';
+import { menu, search, thirdweb } from '../assets';
 import { navlinks } from '../constants';
 import { Link, useNavigate } from 'react-router-dom';
 import { useStateContext } from '../context';
 
 const NavBar = () => {
-  const { accounts, connectAccounts } = useStateContext();
-  console.log(accounts);
+  const { account, connectAccounts } = useStateContext();
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState('dashboard');
   const [toggleDrawer, setToggleDrawer] = useState(false);
@@ -36,10 +35,10 @@ const NavBar = () => {
       <div className="sm:flex hidden flex-row justify-end gap-4">
         <CustomButton
           btnType="button"
-          title={accounts ? 'Create a Campaign' : 'Connect Wallet'}
-          styles={accounts ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
+          title={account ? 'Create a Campaign' : 'Connect Wallet'}
+          styles={account ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
           handleClick={() => {
-            if (accounts) navigate('create-campaign');
+            if (account) navigate('create-campaign');
             else connectionHandler();
           }}
           disabled={isConnecting}
@@ -111,11 +110,11 @@ const NavBar = () => {
           <div className="flex mx-4 ">
             <CustomButton
               btnType="button"
-              title={accounts ? 'Create a Campaign' : 'Connect Wallet'}
-              styles={accounts ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
+              title={account ? 'Create a Campaign' : 'Connect Wallet'}
+              styles={account ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
               handleClick={() => {
-                if (accounts) navigate('create-campaign');
-                // else 'connect()';
+                if (account) navigate('create-campaign');
+                else connectionHandler();
               }}
             />
           </div>

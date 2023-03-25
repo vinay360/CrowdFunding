@@ -1,21 +1,28 @@
 import { createContext, useContext } from 'react';
 import useConnect from './connect';
+import useContract from './use-contract';
 
 const state = {
-  accounts: [],
+  account: '',
   connectAccounts: async () => {},
+  createCampaign: async () => {},
+  getCampaigns: async () => {},
+  getUserCampaigns: async () => {},
 };
 
 export const StateContext = createContext(state);
 
 export const StateContextProvider = ({ children }) => {
-  const [accounts, connectAccounts] = useConnect();
-
+  const [account, connectAccounts] = useConnect();
+  const [createCampaign, getCampaigns, getUserCampaigns] = useContract();
   return (
     <StateContext.Provider
       value={{
-        accounts,
+        account,
         connectAccounts,
+        createCampaign,
+        getCampaigns,
+        getUserCampaigns,
       }}
     >
       {children}
