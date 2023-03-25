@@ -5,11 +5,11 @@ import { navlinks } from '../constants';
 
 const Icon = ({ styles, name, imgUrl, isActive, disabled, handleClick }) => (
   <div
-    className={`w-[48px] h-[48px] rounded-[10px] ${
+    className={`w-[48px] h-[48px] rounded-[50px] ${
       isActive === name && 'bg-[#2c2f32]'
     } flex justify-center items-center ${
       !disabled && 'cursor-pointer'
-    } ${styles}`}
+    } ${styles} hover:bg-[#2c2f32] hover:rounded-[25%]`}
     onClick={handleClick}
   >
     {!isActive ? (
@@ -43,7 +43,7 @@ const SideBar = () => {
               handleClick={() => {
                 if (!link.disabled) {
                   setIsActive(link.name);
-                  navigate(link.path);
+                  navigate(link.link);
                 }
               }}
             />
