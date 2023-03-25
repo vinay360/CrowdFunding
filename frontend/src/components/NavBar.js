@@ -3,12 +3,20 @@ import CustomButton from './CustomButton';
 import { logo, menu, search, thirdweb } from '../assets';
 import { navlinks } from '../constants';
 import { Link, useNavigate } from 'react-router-dom';
+import { useStateContext } from '../context';
 
 const NavBar = () => {
+  const { accounts, connectAccounts } = useStateContext();
+  console.log(accounts);
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState('dashboard');
   const [toggleDrawer, setToggleDrawer] = useState(false);
-  const address = 'sd';
+  const [isConnecting, setIsConnecting] = useState(false);
+  const connectionHandler = async () => {
+    setIsConnecting(true);
+    await connectAccounts();
+    setIsConnecting(false);
+  };
   return (
     <div className="flex md:flex-row flex-col-reverse justify-between mb-[35px] gap-6">
       <div className="lg:flex-1 flex flex-row max-w-[458px] py-2 pl-4 pr-2 h-[52px] bg-[#1c1c24] rounded-[100px]">
@@ -28,12 +36,13 @@ const NavBar = () => {
       <div className="sm:flex hidden flex-row justify-end gap-4">
         <CustomButton
           btnType="button"
-          title={address ? 'Create a Campaign' : 'Connect Wallet'}
-          styles={address ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
+          title={accounts ? 'Create a Campaign' : 'Connect Wallet'}
+          styles={accounts ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
           handleClick={() => {
-            if (address) navigate('create-campaign');
-            // else 'connect()';
+            if (accounts) navigate('create-campaign');
+            else connectionHandler();
           }}
+          disabled={isConnecting}
         />
 
         <Link to="/profile">
@@ -102,10 +111,10 @@ const NavBar = () => {
           <div className="flex mx-4 ">
             <CustomButton
               btnType="button"
-              title={address ? 'Create a Campaign' : 'Connect Wallet'}
-              styles={address ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
+              title={accounts ? 'Create a Campaign' : 'Connect Wallet'}
+              styles={accounts ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
               handleClick={() => {
-                if (address) navigate('create-campaign');
+                if (accounts) navigate('create-campaign');
                 // else 'connect()';
               }}
             />
