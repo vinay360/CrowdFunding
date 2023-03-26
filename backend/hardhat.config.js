@@ -25,6 +25,7 @@ module.exports = {
     },
     mumbai: {
       url: 'https://rpc.ankr.com/polygon_mumbai',
+      chainId: 80001,
       accounts: [ACCOUNT1],
     },
     sepolia: {

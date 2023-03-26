@@ -63,7 +63,7 @@ function useConnect() {
       window.ethereum.on('chainChanged', chainChanged);
       alreadyConnected();
     }
-  }, []);
+  }, [account]);
 
   return { account, connectAccounts, errorMessage };
 }
