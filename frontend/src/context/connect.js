@@ -17,6 +17,19 @@ function useConnect() {
         console.error(err.message);
         setErrorMessage('There was a problem connecting to MetaMask');
       }
+      try {
+        await provider.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x' + contractAddress.chainId.toString(16) }],
+        });
+        console.log('You have switched to the right network');
+      } catch (switchError) {
+        // The network has not been added to MetaMask
+        if (switchError.code === 4902) {
+          console.log('Please add the Polygon network to MetaMask');
+        }
+        console.log('Cannot switch to the network');
+      }
     } else {
       setErrorMessage('Install MetaMask');
     }
@@ -42,19 +55,6 @@ function useConnect() {
     } catch (err) {
       console.error(err);
       setErrorMessage('There was a problem connecting to MetaMask');
-    }
-    try {
-      await provider.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x' + contractAddress.chainId.toString(16) }],
-      });
-      console.log('You have switched to the right network');
-    } catch (switchError) {
-      // The network has not been added to MetaMask
-      if (switchError.code === 4902) {
-        console.log('Please add the Polygon network to MetaMask');
-      }
-      console.log('Cannot switch to the network');
     }
   };
   useEffect(() => {
