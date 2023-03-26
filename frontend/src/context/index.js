@@ -8,13 +8,21 @@ const state = {
   createCampaign: async () => {},
   getCampaigns: async () => {},
   getUserCampaigns: async () => {},
+  donate: async () => {},
+  getCampaignDetails: async () => {},
 };
 
 export const StateContext = createContext(state);
 
 export const StateContextProvider = ({ children }) => {
-  const [account, connectAccounts] = useConnect();
-  const [createCampaign, getCampaigns, getUserCampaigns] = useContract();
+  const { account, connectAccounts } = useConnect();
+  const {
+    createCampaign,
+    getCampaigns,
+    getUserCampaigns,
+    donate,
+    getCampaignDetails,
+  } = useContract();
   return (
     <StateContext.Provider
       value={{
@@ -23,6 +31,8 @@ export const StateContextProvider = ({ children }) => {
         createCampaign,
         getCampaigns,
         getUserCampaigns,
+        donate,
+        getCampaignDetails,
       }}
     >
       {children}

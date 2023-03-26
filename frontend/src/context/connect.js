@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import contractAddress from '../constants/contractData/CrowdFunding-address.json';
 
 function useConnect() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [account, setAccount] = useState(null);
+  const provider = window.ethereum;
 
   const connectAccounts = async () => {
     if (window.ethereum) {
@@ -41,6 +43,19 @@ function useConnect() {
       console.error(err);
       setErrorMessage('There was a problem connecting to MetaMask');
     }
+    try {
+      await provider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x' + contractAddress.chainId.toString(16) }],
+      });
+      console.log('You have switched to the right network');
+    } catch (switchError) {
+      // The network has not been added to MetaMask
+      if (switchError.code === 4902) {
+        console.log('Please add the Polygon network to MetaMask');
+      }
+      console.log('Cannot switch to the network');
+    }
   };
   useEffect(() => {
     if (window.ethereum) {
@@ -50,7 +65,7 @@ function useConnect() {
     }
   }, []);
 
-  return [account, connectAccounts, errorMessage];
+  return { account, connectAccounts, errorMessage };
 }
 
 export default useConnect;

@@ -16,7 +16,15 @@ function saveFrontendFiles(contract, name) {
 
   fs.writeFileSync(
     contractsDir + `/${name}-address.json`,
-    JSON.stringify({ address: contract.address }, undefined, 2)
+    JSON.stringify(
+      {
+        address: contract.address,
+        chainId: hre.network.config.chainId,
+        url: hre.network.config.url,
+      },
+      undefined,
+      2
+    )
   );
 
   const contractArtifact = artifacts.readArtifactSync(name);

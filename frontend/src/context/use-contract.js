@@ -1,16 +1,22 @@
 import { ethers } from 'ethers';
 import contractAddress from '../constants/contractData/CrowdFunding-address.json';
 import contractAbi from '../constants/contractData/CrowdFunding.json';
+import useConnect from './connect';
 
 function useContract() {
+  const readOnlyProvider = ethers.getDefaultProvider(contractAddress.url);
+  const { account } = useConnect();
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
-  const _contract = new ethers.Contract(
+  let contract = new ethers.Contract(
     contractAddress.address,
     contractAbi.abi,
-    provider
+    account ? provider : readOnlyProvider
   );
-  const contract = _contract.connect(signer);
+  contract.getCampaigns().then((res) => console.log(res));
+  if (account) {
+    contract = contract.connect(signer);
+  }
   const createCampaign = async (form) => {
     try {
       const tx = await contract.createCampaign(
@@ -28,17 +34,22 @@ function useContract() {
 
   const getCampaigns = async () => {
     const campaigns = await contract.getCampaigns();
-    const parsedCampaigns = campaigns.map((campaign, i) => ({
+    console.log(campaigns);
+    const parsedCampaigns = campaigns.map((campaign) => ({
       owner: campaign.owner,
       title: campaign.title,
       description: campaign.description,
       target: ethers.utils.formatEther(campaign.target.toString()),
-      deadline: parseInt(campaign.deadline, toString(), 16),
+      deadline: parseInt(campaign.deadline),
       amountCollected: ethers.utils.formatEther(
         campaign.amountCollected.toString()
       ),
-      id: i,
+      id: parseInt(campaign.id),
       image: campaign.image,
+      donators: campaign.donations.map((donation, idx) => ({
+        donation: ethers.utils.formatEther(parseInt(donation).toString()),
+        donator: campaign.donators[idx],
+      })),
     }));
     return parsedCampaigns;
   };
@@ -51,7 +62,44 @@ function useContract() {
     });
     return userCampaigns;
   };
-  return [createCampaign, getCampaigns, getUserCampaigns];
+
+  const donate = async (id, _value) => {
+    const tx = await contract.donateToCampaign(id, {
+      value: ethers.utils.parseEther(`${_value}`),
+    });
+    return await tx.wait();
+  };
+
+  const getCampaignDetails = async (id) => {
+    const campaign = await contract.campaigns(id);
+    const parsedCampaign = {
+      owner: campaign.owner,
+      title: campaign.title,
+      description: campaign.description,
+      target: ethers.utils.formatEther(campaign.target.toString()),
+      deadline: parseInt(campaign.deadline),
+      amountCollected: ethers.utils.formatEther(
+        campaign.amountCollected.toString()
+      ),
+      id: parseInt(campaign.id),
+      image: campaign.image,
+    };
+    const donationDetails = await contract.getDonators(id);
+    parsedCampaign.donators = donationDetails[1].map((donation, idx) => ({
+      donation: ethers.utils.formatEther(parseInt(donation).toString()),
+      donator: donationDetails[0][idx],
+    }));
+    console.log(parsedCampaign.donators);
+    return parsedCampaign;
+  };
+
+  return {
+    createCampaign,
+    getCampaigns,
+    getUserCampaigns,
+    donate,
+    getCampaignDetails,
+  };
 }
 
 export default useContract;

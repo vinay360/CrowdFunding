@@ -16,6 +16,7 @@ contract CrowdFunding {
         string image;
         address[] donators;
         uint256[] donations;
+        uint256 id;
     }
 
     event TransferredToOwner(address indexed ownerAddress, uint256 amount);
@@ -46,6 +47,7 @@ contract CrowdFunding {
             "The deadline should be a date in the future"
         );
 
+        campaign.id = numOfCampaigns;
         campaign.owner = msg.sender;
         campaign.title = _title;
         campaign.description = _description;

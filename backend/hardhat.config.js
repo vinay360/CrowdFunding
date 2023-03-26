@@ -16,6 +16,7 @@ module.exports = {
     },
     localhost: {
       url: 'http://localhost:8545',
+      chainId: 31337,
     },
     liberty: {
       url: 'https://liberty20.shardeum.org/',

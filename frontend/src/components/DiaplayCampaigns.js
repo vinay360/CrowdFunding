@@ -7,7 +7,9 @@ const DiaplayCampaigns = ({ title, isLoading, campaigns }) => {
   const navigate = useNavigate();
 
   const handleNavigate = (campaign) => {
-    navigate(`/campaign-details/${campaign.title}`, { state: campaign });
+    navigate(`/campaign-details/${campaign.title}`, {
+      state: { id: campaign.id },
+    });
   };
 
   return (

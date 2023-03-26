@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CustomButton from './CustomButton';
-import { menu, search, thirdweb } from '../assets';
+import { menu, search, avatar } from '../assets';
 import { navlinks } from '../constants';
 import { Link, useNavigate } from 'react-router-dom';
 import { useStateContext } from '../context';
@@ -24,7 +24,7 @@ const NavBar = () => {
           placeholder="Search for Campaigns"
           className="flex w-full font-epilogue text-[14px] placeholder:text-[#4b5264] text-white bg-transparent outline-none"
         />
-        <div className="w-[72px] h-full rounded-[20px] bg-[#4acd8d] flex justify-center items-center cursor-pointer">
+        <div className="w-[72px] h-full rounded-[20px] bg-[#cd4a9d] flex justify-center items-center cursor-pointer">
           <img
             src={search}
             alt="search"
@@ -35,8 +35,12 @@ const NavBar = () => {
       <div className="sm:flex hidden flex-row justify-end gap-4">
         <CustomButton
           btnType="button"
-          title={account ? 'Create a Campaign' : 'Connect Wallet'}
-          styles={account ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
+          title={
+            account
+              ? account.slice(0, 5) + '...' + account.slice(-3)
+              : 'Connect Wallet'
+          }
+          styles={'bg-gradient-to-r from-[#41DFD0] to-[#CD4A9D]'}
           handleClick={() => {
             if (account) navigate('create-campaign');
             else connectionHandler();
@@ -47,9 +51,9 @@ const NavBar = () => {
         <Link to="/profile">
           <div className="w-[52px] h-[52px] rounded-full bg-[#2c2f32] flex justify-center items-center cursor-pointer">
             <img
-              src={thirdweb}
+              src={avatar}
               alt="user"
-              className="w-[60%] h-[60%] object-contain"
+              className="w-[90%] h-[90%] object-contain"
             />
           </div>
         </Link>
@@ -58,7 +62,7 @@ const NavBar = () => {
       <div className="sm:hidden flex justify-between items-center relative">
         <div className="w-[40px] h-[40px] rounded-[10px] bg-[#2c2f32] flex justify-center items-center cursor-pointer">
           <img
-            src={thirdweb}
+            src={avatar}
             alt="user"
             className="w-[60%] h-[60%] object-contain"
           />
