@@ -3,7 +3,7 @@ import { DiaplayCampaigns } from '../components';
 import { useStateContext } from '../context';
 
 const Home = () => {
-  const [isLoding, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { getCampaigns } = useStateContext();
   const [campaigns, setCampaigns] = useState([]);
   useEffect(() => {
@@ -11,12 +11,11 @@ const Home = () => {
     getCampaigns().then((response) => {
       setCampaigns(response);
       setIsLoading(false);
-      console.log(response);
     });
   }, [getCampaigns]);
   return (
     <DiaplayCampaigns
-      isLoding={isLoding}
+      isLoading={isLoading}
       title="All Campaigns"
       campaigns={campaigns}
     />

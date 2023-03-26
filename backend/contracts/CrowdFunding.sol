@@ -39,11 +39,11 @@ contract CrowdFunding {
         uint256 _target,
         uint256 _deadline,
         string memory _image
-    ) public returns (uint256) {
+    ) public {
         Campaign storage campaign = campaigns[numOfCampaigns];
         require(
-            _deadline < block.timestamp,
-            "The should be a date in the future"
+            _deadline > block.timestamp.mul(1000),
+            "The deadline should be a date in the future"
         );
 
         campaign.owner = msg.sender;
@@ -54,7 +54,6 @@ contract CrowdFunding {
         campaign.image = _image;
 
         numOfCampaigns++;
-        return numOfCampaigns - 1;
     }
 
     function donateToCampaign(uint256 _id) public payable returns (bool, bool) {

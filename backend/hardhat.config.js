@@ -2,7 +2,8 @@ require('@nomicfoundation/hardhat-toolbox');
 require('dotenv').config();
 require('./tasks/task');
 
-const GOERLI_PRIVATE_KEY = process.env.GOERLI_PRIVATE_KEY;
+const ACCOUNT1 = process.env.ACCOUNT1;
+const ACCOUNT2 = process.env.ACCOUNT2;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 
@@ -11,10 +12,23 @@ module.exports = {
   networks: {
     goerli: {
       url: `https://rpc.ankr.com/eth_goerli`,
-      accounts: [GOERLI_PRIVATE_KEY],
+      accounts: [ACCOUNT2],
     },
     localhost: {
       url: 'http://localhost:8545',
+    },
+    liberty: {
+      url: 'https://liberty20.shardeum.org/',
+      chainId: 8081,
+      accounts: [ACCOUNT1],
+    },
+    mumbai: {
+      url: 'https://rpc.ankr.com/polygon_mumbai',
+      accounts: [ACCOUNT1],
+    },
+    sepolia: {
+      url: 'https://rpc.ankr.com/eth_sepolia',
+      accounts: [ACCOUNT2],
     },
   },
 };

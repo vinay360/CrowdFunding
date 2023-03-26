@@ -33,7 +33,7 @@ function useContract() {
       title: campaign.title,
       description: campaign.description,
       target: ethers.utils.formatEther(campaign.target.toString()),
-      deadline: ethers.utils.formatEther(campaign.deadline.toString()),
+      deadline: parseInt(campaign.deadline, toString(), 16),
       amountCollected: ethers.utils.formatEther(
         campaign.amountCollected.toString()
       ),

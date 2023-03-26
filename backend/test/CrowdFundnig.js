@@ -7,11 +7,26 @@ describe('CrowdFunding', function () {
     const [owner, campaignOwner, donator] = await ethers.getSigners();
     const CrowdFunding = await ethers.getContractFactory('CrowdFunding');
     const CUT = 10;
+    let futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 10);
+    futureDate = futureDate.getTime();
+    let pastDate = new Date();
+    pastDate.setDate(pastDate.getDate() - 10);
+    pastDate = pastDate.getTime();
     const crowdFunding = await CrowdFunding.deploy(CUT);
     await crowdFunding.deployed();
 
     const reciept = await crowdFunding.deployTransaction.wait();
-    return { owner, campaignOwner, donator, crowdFunding, reciept, CUT };
+    return {
+      owner,
+      campaignOwner,
+      donator,
+      crowdFunding,
+      reciept,
+      CUT,
+      futureDate,
+      pastDate,
+    };
   }
 
   describe('deployment', function () {
@@ -21,24 +36,41 @@ describe('CrowdFunding', function () {
     });
   });
 
+  it('Should check the dealdline must be greater then timestamp', async function () {
+    const { campaignOwner, crowdFunding, futureDate, pastDate } =
+      await loadFixture(deployContract);
+    await expect(
+      crowdFunding
+        .connect(campaignOwner)
+        .createCampaign('test', 'test', 100, futureDate, 'test')
+    ).not.to.be.reverted;
+    await expect(
+      crowdFunding
+        .connect(campaignOwner)
+        .createCampaign('test', 'test', 100, pastDate, 'test')
+    ).to.be.revertedWith('The deadline should be a date in the future');
+  });
+
   it('Should check that createCampaign is working', async function () {
-    const { campaignOwner, crowdFunding } = await loadFixture(deployContract);
+    const { campaignOwner, crowdFunding, futureDate } = await loadFixture(
+      deployContract
+    );
     const campaignId = (
       await crowdFunding
         .connect(campaignOwner)
-        .createCampaign('test', 'test', 100, 100, 'test')
+        .createCampaign('test', 'test', 100, futureDate, 'test')
     ).value.toNumber();
     const campaign = await crowdFunding.campaigns(campaignId);
     expect(campaign.owner).to.equal(campaignOwner.address);
   });
 
   it('Should check that donateToCampain is working', async function () {
-    const { owner, campaignOwner, donator, crowdFunding, CUT } =
+    const { owner, campaignOwner, donator, crowdFunding, CUT, futureDate } =
       await loadFixture(deployContract);
     const campaignId = (
       await crowdFunding
         .connect(campaignOwner)
-        .createCampaign('test', 'test', 100, 100, 'test')
+        .createCampaign('test', 'test', 100, futureDate, 'test')
     ).value.toNumber();
 
     const donationAmount = 1;

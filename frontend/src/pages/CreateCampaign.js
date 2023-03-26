@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { money } from '../assets';
 import { CustomButton, FormField } from '../components/';
 import { useStateContext } from '../context';
+import { checkIfImage } from '../utils';
 
 const CreateCampaign = () => {
   const navigate = useNavigate();
@@ -21,13 +22,23 @@ const CreateCampaign = () => {
     setForm((prev) => ({ ...prev, [name]: e.target.value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const addCampaign = async (valid) => {
+    if (!valid) {
+      alert('Pleade enter a valid image url');
+      return;
+    }
     setIsLoading(true);
     const status = await createCampaign(form);
-    console.log(status);
     setIsLoading(false);
-    navigate('/');
+    if (status.value) {
+      console.log('Campaign Created Succesfully');
+      navigate('/');
+    } else alert(status.data.data.message);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    checkIfImage(form.image, addCampaign);
   };
   return (
     <div className="w-full flex justify-center">
