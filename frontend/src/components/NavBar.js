@@ -4,13 +4,18 @@ import { menu, search, avatar } from '../assets';
 import { navlinks } from '../constants';
 import { Link, useNavigate } from 'react-router-dom';
 import { useStateContext } from '../context';
+import useComponentVisible from '../hooks/use-component-visible';
 
 const NavBar = () => {
   const { account, connectAccounts } = useStateContext();
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState('dashboard');
-  const [toggleDrawer, setToggleDrawer] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
+  const {
+    ref,
+    isComponentVisible: toggleDrawer,
+    setIsComponentVisible: setToggleDrawer,
+  } = useComponentVisible(false);
   const connectionHandler = async () => {
     setIsConnecting(true);
     await connectAccounts();
@@ -69,18 +74,20 @@ const NavBar = () => {
             />
           </div>
         </Link>
-
         <img
           src={menu}
-          alt="ment"
+          alt="menu"
           className="w-[34px] h-[34px] object-contain cursor-pointer"
-          onClick={() => setToggleDrawer((state) => !state)}
+          onClick={() => {
+            setToggleDrawer((prev) => !prev);
+          }}
         />
 
         <div
           className={`absolute top-[60px] right-0 left-0 bg-[#2a2725f4] z-10 shadow-secondary py-4 ${
             !toggleDrawer ? '-translate-y-[100vh]' : 'translate-y-[0]'
           } transition-all duration-700`}
+          ref={ref}
         >
           <ul className="mb-4">
             {navlinks.map((link) => (
@@ -105,7 +112,7 @@ const NavBar = () => {
                 <span
                   className={`ml-4 font-epilogue font-semibold text-[14px] leading-[26px] ${
                     isActive === link.name ? 'text-white' : 'text-[#808091]'
-                  }`}
+                  } first-letter:capitalize`}
                 >
                   {link.name}
                 </span>

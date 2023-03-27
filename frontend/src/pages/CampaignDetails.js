@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useStateContext } from '../context';
 import { CountBox, CustomButton, loader } from '../components';
@@ -7,7 +7,7 @@ import { calculateBarPercentage, daysLeft } from '../utils';
 import { thirdweb } from '../assets';
 
 const CampaignDetails = () => {
-  const { state } = useLocation();
+  const state = useParams();
   const [campaign, updateCampaign] = useState({
     owner: '',
     title: '',
@@ -43,7 +43,7 @@ const CampaignDetails = () => {
   };
 
   return (
-    <div>
+    <div className="overflow-y-scroll no-scrollbar">
       {isLoading && <loader />}
 
       <div className="w-full flex md:flex-row flex-col mt-10 gap-[30px]">
@@ -125,12 +125,12 @@ const CampaignDetails = () => {
                 campaign.donators.map((item, index) => (
                   <div
                     key={`${item.donator}-${index}`}
-                    className="flex justify-between items-center gap-4"
+                    className="flex justify-between items-center gap-4 flex-wrap"
                   >
-                    <p className="font-epilogue font-normal text-[16px] text-[#b2b3bd] leading-[26px] break-ll">
+                    <p className="font-epilogue font-normal text-[14px] text-[#b2b3bd] leading-[26px] break-ll">
                       {index + 1}. {item.donator}
                     </p>
-                    <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] break-ll">
+                    <p className="font-epilogue font-normal text-[14px] text-[#808191] leading-[26px] break-ll">
                       {item.donation}
                     </p>
                   </div>
