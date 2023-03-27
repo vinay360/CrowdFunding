@@ -6,8 +6,12 @@ import useConnect from './connect';
 function useContract() {
   const readOnlyProvider = ethers.getDefaultProvider(contractAddress.url);
   const { account } = useConnect();
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+  let provider;
+  let signer;
+  if (account) {
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    signer = provider.getSigner();
+  }
   let contract = new ethers.Contract(
     contractAddress.address,
     contractAbi.abi,
@@ -18,6 +22,10 @@ function useContract() {
     contract = contract.connect(signer);
   }
   const createCampaign = async (form) => {
+    if (!account) {
+      alert('Please Connect Metamask');
+      return;
+    }
     try {
       const tx = await contract.createCampaign(
         form.title,
@@ -64,6 +72,10 @@ function useContract() {
   };
 
   const donate = async (id, _value) => {
+    if (!account) {
+      alert('Please Connect Metamask');
+      return;
+    }
     const tx = await contract.donateToCampaign(id, {
       value: ethers.utils.parseEther(`${_value}`),
     });

@@ -60,13 +60,15 @@ const NavBar = () => {
       </div>
 
       <div className="sm:hidden flex justify-between items-center relative">
-        <div className="w-[40px] h-[40px] rounded-[10px] bg-[#2c2f32] flex justify-center items-center cursor-pointer">
-          <img
-            src={avatar}
-            alt="user"
-            className="w-[60%] h-[60%] object-contain"
-          />
-        </div>
+        <Link to="/profile">
+          <div className="w-[40px] h-[40px] rounded-[10px] bg-[#2c2f32] flex justify-center items-center cursor-pointer">
+            <img
+              src={avatar}
+              alt="user"
+              className="w-[60%] h-[60%] object-contain"
+            />
+          </div>
+        </Link>
 
         <img
           src={menu}
@@ -76,7 +78,7 @@ const NavBar = () => {
         />
 
         <div
-          className={`absolute top-[60px] right-0 left-0 bg-[#1c1c24] z-10 shadow-secondary py-4 ${
+          className={`absolute top-[60px] right-0 left-0 bg-[#2a2725f4] z-10 shadow-secondary py-4 ${
             !toggleDrawer ? '-translate-y-[100vh]' : 'translate-y-[0]'
           } transition-all duration-700`}
         >
@@ -102,7 +104,7 @@ const NavBar = () => {
                 />
                 <span
                   className={`ml-4 font-epilogue font-semibold text-[14px] leading-[26px] ${
-                    isActive === link.name ? 'text-[#1dc071]' : 'text-[#808091]'
+                    isActive === link.name ? 'text-white' : 'text-[#808091]'
                   }`}
                 >
                   {link.name}
@@ -114,12 +116,17 @@ const NavBar = () => {
           <div className="flex mx-4 ">
             <CustomButton
               btnType="button"
-              title={account ? 'Create a Campaign' : 'Connect Wallet'}
-              styles={account ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
+              title={
+                account
+                  ? account.slice(0, 5) + '...' + account.slice(-3)
+                  : 'Connect Wallet'
+              }
+              styles={'bg-gradient-to-r from-[#41DFD0] to-[#CD4A9D]'}
               handleClick={() => {
                 if (account) navigate('create-campaign');
                 else connectionHandler();
               }}
+              disabled={isConnecting}
             />
           </div>
         </div>

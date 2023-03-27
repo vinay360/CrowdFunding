@@ -31,7 +31,7 @@ function useConnect() {
         console.log('Cannot switch to the network');
       }
     } else {
-      setErrorMessage('Install MetaMask');
+      alert('Install MetaMask');
     }
   };
 
