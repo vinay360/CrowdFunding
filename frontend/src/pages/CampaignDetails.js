@@ -43,7 +43,7 @@ const CampaignDetails = () => {
   };
 
   return (
-    <div className="overflow-y-scroll no-scrollbar">
+    <div>
       {isLoading && <loader />}
 
       <div className="w-full flex md:flex-row flex-col mt-10 gap-[30px]">
