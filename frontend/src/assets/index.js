@@ -11,9 +11,10 @@ import search from './search.svg';
 import menu from './menu.svg';
 import money from './money.svg';
 import loader from './loader.svg';
-import thirdweb from './thirdweb.png';
 import finallogo from './finallogo.png';
 import avatar from './avatar.png';
+import punk from './punk.webp';
+const thirdweb = punk;
 
 export {
   tagType,
